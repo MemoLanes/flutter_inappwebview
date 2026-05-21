@@ -112,6 +112,11 @@ final List<NavigationSection> defaultNavigationSections = [
     title: 'Testing',
     items: [
       NavigationItem(
+        title: 'Custom Scheme Demo',
+        icon: Icons.science_outlined,
+        routeName: '/custom-scheme-demo',
+      ),
+      NavigationItem(
         title: 'Automated Test Runner',
         icon: Icons.science,
         routeName: '/test-automation',
