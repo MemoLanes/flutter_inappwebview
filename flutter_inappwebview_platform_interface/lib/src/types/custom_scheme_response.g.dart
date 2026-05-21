@@ -17,10 +17,31 @@ class CustomSchemeResponse {
 
   ///Data enconded to 'base64'.
   Uint8List data;
+
+  ///HTTP response headers. Used together with [statusCode] to provide
+  ///full HTTP semantics for the custom scheme response.
+  ///If [statusCode] is set and this is `null`, a `Content-Type` header
+  ///will be automatically added from [contentType].
+  ///
+  ///**Supported Platforms/Implementations**:
+  ///- iOS ([Official API - HTTPURLResponse](https://developer.apple.com/documentation/foundation/httpurlresponse))
+  ///- MacOS ([Official API - HTTPURLResponse](https://developer.apple.com/documentation/foundation/httpurlresponse))
+  Map<String, String>? headers;
+
+  ///HTTP status code (e.g. 200). When provided, platforms that support it
+  ///will construct an HTTP-style response, enabling JavaScript `fetch()` and
+  ///`XMLHttpRequest` to consume the result.
+  ///
+  ///**Supported Platforms/Implementations**:
+  ///- iOS ([Official API - HTTPURLResponse](https://developer.apple.com/documentation/foundation/httpurlresponse))
+  ///- MacOS ([Official API - HTTPURLResponse](https://developer.apple.com/documentation/foundation/httpurlresponse))
+  int? statusCode;
   CustomSchemeResponse({
     this.contentEncoding = 'utf-8',
     required this.contentType,
     required this.data,
+    this.headers,
+    this.statusCode,
   });
 
   ///Gets a possible [CustomSchemeResponse] instance from a [Map] value.
@@ -34,6 +55,8 @@ class CustomSchemeResponse {
     final instance = CustomSchemeResponse(
       contentType: map['contentType'],
       data: Uint8List.fromList(map['data'].cast<int>()),
+      headers: map['headers']?.cast<String, String>(),
+      statusCode: map['statusCode'],
     );
     if (map['contentEncoding'] != null) {
       instance.contentEncoding = map['contentEncoding'];
@@ -47,6 +70,8 @@ class CustomSchemeResponse {
       "contentEncoding": contentEncoding,
       "contentType": contentType,
       "data": data,
+      "headers": headers,
+      "statusCode": statusCode,
     };
   }
 
@@ -57,6 +82,6 @@ class CustomSchemeResponse {
 
   @override
   String toString() {
-    return 'CustomSchemeResponse{contentEncoding: $contentEncoding, contentType: $contentType, data: $data}';
+    return 'CustomSchemeResponse{contentEncoding: $contentEncoding, contentType: $contentType, data: $data, headers: $headers, statusCode: $statusCode}';
   }
 }

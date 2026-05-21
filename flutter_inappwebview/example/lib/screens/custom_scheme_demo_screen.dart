@@ -144,6 +144,11 @@ class _CustomSchemeDemoScreenState extends State<CustomSchemeDemoScreen> {
             data: Uint8List.fromList(utf8.encode(jsonBody)),
             contentType: "application/json",
             contentEncoding: "utf-8",
+            statusCode: 200,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json; charset=utf-8",
+            },
           );
         }
 
@@ -156,6 +161,8 @@ class _CustomSchemeDemoScreenState extends State<CustomSchemeDemoScreen> {
             data: Uint8List.fromList(utf8.encode(svg)),
             contentType: "image/svg+xml",
             contentEncoding: "utf-8",
+            statusCode: 200,
+            headers: {"Content-Type": "image/svg+xml"},
           );
         }
 
@@ -165,6 +172,8 @@ class _CustomSchemeDemoScreenState extends State<CustomSchemeDemoScreen> {
             data: Uint8List.fromList(utf8.encode(js)),
             contentType: "application/javascript",
             contentEncoding: "utf-8",
+            statusCode: 200,
+            headers: {"Content-Type": "application/javascript"},
           );
         }
 
@@ -174,6 +183,8 @@ class _CustomSchemeDemoScreenState extends State<CustomSchemeDemoScreen> {
             data: Uint8List.fromList(utf8.encode(css)),
             contentType: "text/css",
             contentEncoding: "utf-8",
+            statusCode: 200,
+            headers: {"Content-Type": "text/css"},
           );
         }
 
