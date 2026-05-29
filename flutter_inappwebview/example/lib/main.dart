@@ -27,6 +27,7 @@ import 'package:flutter_inappwebview_example/screens/support_matrix/support_matr
 import 'package:flutter_inappwebview_example/screens/support_matrix/platform_comparison_screen.dart';
 import 'package:flutter_inappwebview_example/screens/test_automation/test_runner_screen.dart';
 import 'package:flutter_inappwebview_example/screens/test_automation/test_configuration_screen.dart';
+import 'package:flutter_inappwebview_example/screens/custom_scheme_demo_screen.dart';
 import 'package:flutter_inappwebview_example/utils/test_registry.dart';
 
 // import 'package:path_provider/path_provider.dart';
@@ -141,6 +142,7 @@ class _MyAppState extends State<MyApp> {
         '/platform-comparison': (context) => PlatformComparisonScreen(),
         '/test-automation': (context) => TestRunnerScreen(),
         '/test-configuration': (context) => TestConfigurationScreen(),
+        '/custom-scheme-demo': (context) => CustomSchemeDemoScreen(),
       },
     );
   }

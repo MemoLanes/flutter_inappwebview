@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Scheme Demo</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; padding: 16px; background: #f5f5f5; }
+        h1 { font-size: 18px; margin-bottom: 16px; }
+        .test-item { background: white; border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 4px solid #ccc; }
+        .test-item.pass { border-left-color: #4caf50; }
+        .test-item.fail { border-left-color: #f44336; }
+        .test-item.running { border-left-color: #ff9800; }
+        .test-name { font-weight: 600; font-size: 14px; }
+        .test-result { font-size: 12px; color: #666; margin-top: 4px; word-break: break-all; }
+        .status { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; color: white; }
+        .status.pass { background: #4caf50; }
+        .status.fail { background: #f44336; }
+        .status.running { background: #ff9800; }
+        #hidden-target { display: none; }
+    </style>
+</head>
+<body>
+    <h1>Custom Scheme Response Tests</h1>
+    <div id="results"></div>
+    <div id="hidden-target"></div>
+
+    <script>
+        var results = [];
+        var totalTests = 5;
+        var completedTests = 0;
+
+        function reportResult(name, passed, detail) {
+            completedTests++;
+            var result = { name: name, passed: passed, detail: detail };
+            results.push(result);
+            renderResult(result);
+            if (completedTests >= totalTests) {
+                window.flutter_inappwebview.callHandler('testResults', JSON.stringify(results));
+            }
+        }
+
+        function renderResult(result) {
+            var container = document.getElementById('results');
+            var div = document.createElement('div');
+            div.className = 'test-item ' + (result.passed ? 'pass' : 'fail');
+            div.innerHTML = '<span class="status ' + (result.passed ? 'pass' : 'fail') + '">'
+                + (result.passed ? 'PASS' : 'FAIL') + '</span> '
+                + '<span class="test-name">' + result.name + '</span>'
+                + '<div class="test-result">' + result.detail + '</div>';
+            container.appendChild(div);
+        }
+
+        window.addEventListener("flutterInAppWebViewPlatformReady", function() {
+            runAllTests();
+        });
+
+        function runAllTests() {
+            testFetch();
+            testXHR();
+            testImg();
+            testScript();
+            testCSS();
+        }
+
+        // Test 1: fetch() API
+        function testFetch() {
+            fetch("my-custom-scheme://host/api/data")
+                .then(function(response) {
+                    return response.text().then(function(text) {
+                        reportResult("fetch()", true, "Status: " + response.status + ", Body: " + text);
+                    });
+                })
+                .catch(function(err) {
+                    reportResult("fetch()", false, "Error: " + err.toString());
+                });
+        }
+
+        // Test 2: XMLHttpRequest
+        function testXHR() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "my-custom-scheme://host/api/data", true);
+            xhr.onload = function() {
+                reportResult("XMLHttpRequest", true, "Status: " + xhr.status + ", Body: " + xhr.responseText);
+            };
+            xhr.onerror = function() {
+                reportResult("XMLHttpRequest", false, "Error event fired, status: " + xhr.status + ", readyState: " + xhr.readyState);
+            };
+            xhr.ontimeout = function() {
+                reportResult("XMLHttpRequest", false, "Timeout");
+            };
+            try {
+                xhr.send();
+            } catch(e) {
+                reportResult("XMLHttpRequest", false, "Exception: " + e.toString());
+            }
+        }
+
+        // Test 3: <img src>
+        function testImg() {
+            var img = new Image();
+            img.onload = function() {
+                reportResult("<img> element", true, "Image loaded successfully (naturalWidth: " + img.naturalWidth + ")");
+            };
+            img.onerror = function() {
+                reportResult("<img> element", false, "Image failed to load");
+            };
+            img.src = "my-custom-scheme://host/image.svg";
+            document.getElementById('hidden-target').appendChild(img);
+        }
+
+        // Test 4: <script src> (JSONP-style)
+        function testScript() {
+            window.__customSchemeScriptCallback = function(data) {
+                reportResult("<script> element (JSONP)", true, "Callback received: " + JSON.stringify(data));
+            };
+            var script = document.createElement('script');
+            script.onerror = function() {
+                reportResult("<script> element (JSONP)", false, "Script failed to load");
+            };
+            // Timeout in case neither fires
+            var timeout = setTimeout(function() {
+                if (completedTests < totalTests) {
+                    reportResult("<script> element (JSONP)", false, "Timeout - no callback or error");
+                }
+            }, 5000);
+            var origCallback = window.__customSchemeScriptCallback;
+            window.__customSchemeScriptCallback = function(data) {
+                clearTimeout(timeout);
+                origCallback(data);
+            };
+            script.src = "my-custom-scheme://host/script.js";
+            document.head.appendChild(script);
+        }
+
+        // Test 5: <link> CSS
+        function testCSS() {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.onload = function() {
+                reportResult("<link> CSS", true, "Stylesheet loaded successfully");
+            };
+            link.onerror = function() {
+                reportResult("<link> CSS", false, "Stylesheet failed to load");
+            };
+            link.href = "my-custom-scheme://host/style.css";
+            document.head.appendChild(link);
+        }
+    </script>
+</body>
+</html>
