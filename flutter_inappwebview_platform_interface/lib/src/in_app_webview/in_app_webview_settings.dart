@@ -1183,6 +1183,14 @@ as it can cause framerate drops on animations in Android 9 and lower (see [Hybri
   @SupportedPlatforms(platforms: [AndroidPlatform()])
   bool? useShouldInterceptRequest;
 
+  ///Limits the [PlatformWebViewCreationParams.shouldInterceptRequest] event to
+  ///requests whose URL starts with one of these prefixes.
+  ///
+  ///A `null` value keeps the event enabled for all URLs. An empty list disables
+  ///the event. Matching is case-sensitive and uses literal `startsWith`.
+  @SupportedPlatforms(platforms: [AndroidPlatform()])
+  List<String>? shouldInterceptRequestUrlPrefixes;
+
   ///Set to `true` to be able to listen at the [PlatformWebViewCreationParams.onRenderProcessGone] event.
   ///
   ///If the [PlatformWebViewCreationParams.onRenderProcessGone] event is implemented and this value is `null`,
@@ -3353,6 +3361,7 @@ as it can cause framerate drops on animations in Android 9 and lower (see [Hybri
     this.regexToAllowSyncUrlLoading,
     this.useHybridComposition = true,
     this.useShouldInterceptRequest,
+    this.shouldInterceptRequestUrlPrefixes,
     this.useOnRenderProcessGone,
     this.overScrollMode = OverScrollMode_.IF_CONTENT_SCROLLS,
     this.networkAvailable,
