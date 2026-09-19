@@ -128,6 +128,8 @@ public class InAppWebViewSettings implements ISettings<InAppWebViewInterface> {
   @Nullable
   public Map<String, Object> rendererPriorityPolicy;
   public Boolean useShouldInterceptRequest = false;
+  @Nullable
+  public List<String> shouldInterceptRequestUrlPrefixes;
   public Boolean useOnRenderProcessGone = false;
   public Boolean disableDefaultErrorPage = false;
   public Boolean useHybridComposition = true;
@@ -411,6 +413,9 @@ public class InAppWebViewSettings implements ISettings<InAppWebViewInterface> {
         case "useShouldInterceptRequest":
           useShouldInterceptRequest = (Boolean) value;
           break;
+        case "shouldInterceptRequestUrlPrefixes":
+          shouldInterceptRequestUrlPrefixes = new ArrayList<>((List<String>) value);
+          break;
         case "useOnRenderProcessGone":
           useOnRenderProcessGone = (Boolean) value;
           break;
@@ -572,6 +577,8 @@ public class InAppWebViewSettings implements ISettings<InAppWebViewInterface> {
     settings.put("scrollBarFadeDuration", scrollBarFadeDuration);
     settings.put("rendererPriorityPolicy", rendererPriorityPolicy);
     settings.put("useShouldInterceptRequest", useShouldInterceptRequest);
+    settings.put("shouldInterceptRequestUrlPrefixes",
+            shouldInterceptRequestUrlPrefixes != null ? new ArrayList<>(shouldInterceptRequestUrlPrefixes) : null);
     settings.put("useOnRenderProcessGone", useOnRenderProcessGone);
     settings.put("disableDefaultErrorPage", disableDefaultErrorPage);
     settings.put("useHybridComposition", useHybridComposition);
@@ -603,6 +610,18 @@ public class InAppWebViewSettings implements ISettings<InAppWebViewInterface> {
     settings.put("alpha", alpha);
     settings.put("useOnShowFileChooser", useOnShowFileChooser);
     return settings;
+  }
+
+  public boolean shouldInterceptRequest(String url) {
+    if (shouldInterceptRequestUrlPrefixes == null) {
+      return true;
+    }
+    for (String prefix : shouldInterceptRequestUrlPrefixes) {
+      if (prefix != null && url != null && url.startsWith(prefix)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @SuppressLint("RestrictedApi")

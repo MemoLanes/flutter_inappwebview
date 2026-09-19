@@ -653,6 +653,9 @@ public class InAppWebViewClient extends WebViewClient {
     }
 
     if (webView.customSettings.useShouldInterceptRequest) {
+      if (!webView.customSettings.shouldInterceptRequest(request.getUrl())) {
+        return null;
+      }
       WebResourceResponseExt response = null;
       if (webView.channelDelegate != null) {
         try {
