@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added `topScrollEdgeEffectHidden` support for initial settings, runtime updates, and native settings readback on iOS 26.0+ (Xcode 26+).
+
 ## 1.2.0-beta.3
 
 - Updated flutter_inappwebview_platform_interface version to ^1.4.0-beta.3

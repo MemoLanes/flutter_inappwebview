@@ -60,6 +60,7 @@ public class InAppWebViewSettings: ISettings<InAppWebView> {
     var decelerationRate = "NORMAL" // UIScrollView.DecelerationRate.normal
     var alwaysBounceVertical = false
     var alwaysBounceHorizontal = false
+    var topScrollEdgeEffectHidden = false
     var scrollsToTop = true
     var isPagingEnabled = false
     var maximumZoomScale = 1.0
@@ -158,6 +159,11 @@ public class InAppWebViewSettings: ISettings<InAppWebView> {
             realSettings["decelerationRate"] = Util.getDecelerationRateString(type: webView.scrollView.decelerationRate)
             realSettings["alwaysBounceVertical"] = webView.scrollView.alwaysBounceVertical
             realSettings["alwaysBounceHorizontal"] = webView.scrollView.alwaysBounceHorizontal
+            #if compiler(>=6.2)
+            if #available(iOS 26.0, *) {
+                realSettings["topScrollEdgeEffectHidden"] = webView.scrollView.topEdgeEffect.isHidden
+            }
+            #endif
             realSettings["scrollsToTop"] = webView.scrollView.scrollsToTop
             realSettings["isPagingEnabled"] = webView.scrollView.isPagingEnabled
             realSettings["maximumZoomScale"] = webView.scrollView.maximumZoomScale

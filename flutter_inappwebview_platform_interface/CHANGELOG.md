@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added `InAppWebViewSettings.topScrollEdgeEffectHidden` for iOS 26.0+ (Xcode 26+), defaulting to `false`.
+
 ## 1.4.0-beta.3
 
 - Updated `flutter_inappwebview_internal_annotations` dependency from `^1.2.0` to `^1.3.0`
