@@ -1707,6 +1707,23 @@ as it can cause framerate drops on animations in Android 9 and lower (see [Hybri
   )
   bool? alwaysBounceHorizontal;
 
+  ///Hides the scroll-edge effect at the top of the WebView's native scroll view.
+  ///The default value is `false`.
+  ///
+  ///Requires iOS 26.0 or later and Xcode 26 (iOS 26 SDK) or later.
+  ///Ignored on other platforms and when built with an older SDK.
+  @SupportedPlatforms(
+    platforms: [
+      IOSPlatform(
+        available: "26.0",
+        apiName: "UIScrollView.topEdgeEffect.isHidden",
+        apiUrl:
+            "https://developer.apple.com/documentation/uikit/uiscrolledgeffect/ishidden",
+      ),
+    ],
+  )
+  bool? topScrollEdgeEffectHidden;
+
   ///A Boolean value that controls whether the scroll-to-top gesture is enabled.
   ///The scroll-to-top gesture is a tap on the status bar. When a user makes this gesture,
   ///the system asks the scroll view closest to the status bar to scroll to the top.
@@ -3399,6 +3416,7 @@ as it can cause framerate drops on animations in Android 9 and lower (see [Hybri
     this.decelerationRate = ScrollViewDecelerationRate_.NORMAL,
     this.alwaysBounceVertical = false,
     this.alwaysBounceHorizontal = false,
+    this.topScrollEdgeEffectHidden = false,
     this.scrollsToTop = true,
     this.isPagingEnabled = false,
     this.maximumZoomScale = 1.0,

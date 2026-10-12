@@ -516,6 +516,11 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate,
             scrollView.decelerationRate = Util.getDecelerationRate(type: settings.decelerationRate)
             scrollView.alwaysBounceVertical = settings.alwaysBounceVertical
             scrollView.alwaysBounceHorizontal = settings.alwaysBounceHorizontal
+            #if compiler(>=6.2)
+            if #available(iOS 26.0, *) {
+                scrollView.topEdgeEffect.isHidden = settings.topScrollEdgeEffectHidden
+            }
+            #endif
             scrollView.scrollsToTop = settings.scrollsToTop
             scrollView.isPagingEnabled = settings.isPagingEnabled
             scrollView.maximumZoomScale = CGFloat(settings.maximumZoomScale)
@@ -1291,6 +1296,12 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate,
         if newSettingsMap["alwaysBounceHorizontal"] != nil && settings?.alwaysBounceHorizontal != newSettings.alwaysBounceHorizontal {
             scrollView.alwaysBounceHorizontal = newSettings.alwaysBounceHorizontal
         }
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *), let hidden = newSettingsMap["topScrollEdgeEffectHidden"] as? Bool {
+            // Apply explicit false too, even if native state changed outside settings.
+            scrollView.topEdgeEffect.isHidden = hidden
+        }
+        #endif
         if newSettingsMap["scrollsToTop"] != nil && settings?.scrollsToTop != newSettings.scrollsToTop {
             scrollView.scrollsToTop = newSettings.scrollsToTop
         }

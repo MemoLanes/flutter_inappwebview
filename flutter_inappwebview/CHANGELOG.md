@@ -1,3 +1,7 @@
+## Unreleased
+
+- Exposed `InAppWebViewSettings.topScrollEdgeEffectHidden` to control the native top scroll-edge effect on iOS 26.0+ (Xcode 26+).
+
 ## 6.2.0-beta.3
 
 - Added Linux support
